@@ -1,6 +1,7 @@
 var tileImages  =[];
 var tileArray = [];
 var startButton = document.getElementById('start')
+var gameBoard = document.getElementById('gameboard');
 var gamePlay = false; // controls if we rebuild the board restart
 
 //event listeners
@@ -15,9 +16,18 @@ function startGame(){
         buildArray();
         tileArray = tileImages.concat(tileImages);
         shuffleArray(tileArray);
-        console.log(tileArray);
+        buildBoard();
     }
-    console.log('started');
+    
+}
+
+function buildBoard() {
+  var html = "";
+  for (var x = 0; x <= (tileArray.length - 1); x++) {
+    html += '<div class="gameTile"><div class="gameTile">';
+    html += '<img id="cardz' + x + '" src="resources/img/back.jpg" onclick="pickCard(' + x + ',this)" class="flipImage"></div></div>';
+  }
+  gameBoard.innerHTML = html;
 }
 
 function buildArray() {

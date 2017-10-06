@@ -11,7 +11,18 @@
       text-decoration: none;
     }
 
-    .btn:hover {
-      background: #3cb0fd;
-      text-decoration: none;
-    }
+.btn:hover {
+  background: #3cb0fd;
+  text-decoration: none;
+}
+
+.flipImage {
+  width: 100%;
+  border: 1px solid black;
+}
+
+.gameTile {
+  padding: 2px;
+  width: 196px;
+  display: inline-block;
+}
