@@ -1,5 +1,6 @@
 var tileImages  =[];
 var tileArray = [];
+var cardFlipped = -1;
 var startButton = document.getElementById('start')
 var gameBoard = document.getElementById('gameboard');
 var gamePlay = false; // controls if we rebuild the board restart
@@ -28,6 +29,29 @@ function buildBoard() {
     html += '<img id="cardz' + x + '" src="resources/img/back.jpg" onclick="pickCard(' + x + ',this)" class="flipImage"></div></div>';
   }
   gameBoard.innerHTML = html;
+}
+
+function pickCard(tileIndex,t){
+    console.log(tileIndex);
+    console.log(cardFlipped);
+    console.log(t.src);    
+     // check if its already flipped
+    if(cardFlipped >=0 ){
+        // second card Flipped
+          if(tileIndex !=cardFlipped){
+              // second card new
+              t.src = "resources/img/"+tileArray[tileIndex];
+              var secondCard = tileIndex;
+              // check for match
+              
+          }
+        console.log('second', cardFlipped);
+    }else{
+        // first cardFlipped
+        cardFlipped = tileIndex;
+        t.src = "resources/img/"+tileArray[tileIndex];
+        console.log('first',cardFlipped);
+    }
 }
 
 function buildArray() {

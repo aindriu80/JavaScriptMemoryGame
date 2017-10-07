@@ -1,3 +1,7 @@
+#gameboard {
+  margin: 0 auto;
+  width: 610px;
+}
  .btn {
       background: #3498db;
       text-align: center;
