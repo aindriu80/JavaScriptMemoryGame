@@ -2,6 +2,7 @@ var tileImages = [];
 var tileArray = [];
 var tileFlippedOver = [];
 var cardFlipped = -1;
+var timer = '';
 var startButton = document.getElementById('start')
 var gameBoard = document.getElementById('gameboard');
 var gamePlay = false; // controls if we rebuild the board restart
@@ -42,14 +43,30 @@ function cardFlip(t, ti) {
 
 }
 
+function hideCard() {
+    for (var x = 0; x < 2; x++) {
+        var vid = tileFlippedOver.pop();
+        document.getElementById(vid).src = "resources/img/back.jpg";
+        console.log(vid);
+    }
+    clearInterval(timer);
+}
+
 function pickCard(tileIndex, t) {
     // check if its already flipped
     if (!isinArray(t.id, tileFlippedOver)) {
         console.log('not in array')
-
         if (cardFlipped >= 0) {
             cardFlip(t, tileIndex)
             var secondCard = tileIndex;
+            if (tileFlippedOver[tileFlippedOver.length - 1] == tileFlippedOver.length - 2) {
+                // Match
+                console.log('Match');
+            } else {
+                // No Match
+                console.log('No Match');
+                timer = setInterval(hideCard, 3000);
+            }
         } else {
             cardFlipped = tileIndex;
             cardFlip(t, tileIndex);
