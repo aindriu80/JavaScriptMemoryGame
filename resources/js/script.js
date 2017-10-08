@@ -3,6 +3,7 @@ var tileArray = [];
 var tileFlippedOver = [];
 var cardFlipped = -1;
 var timer = '';
+var playLockout = false;
 var startButton = document.getElementById('start')
 var gameBoard = document.getElementById('gameboard');
 var gamePlay = false; // controls if we rebuild the board restart
@@ -40,7 +41,7 @@ function isinArray(v, array) {
 function cardFlip(t, ti) {
     t.src = "resources/img/" + tileArray[ti];
     tileFlippedOver.push(t.id);
-
+    console.log(tileFlippedOver);
 }
 
 function hideCard() {
@@ -50,22 +51,32 @@ function hideCard() {
         console.log(vid);
     }
     clearInterval(timer);
+    playLockout = false;
+    cardFlipped = -1;
+}
+
+function checkSrc(v) {
+    var v = document.getElementById(v).src;
+    return v;
 }
 
 function pickCard(tileIndex, t) {
     // check if its already flipped
-    if (!isinArray(t.id, tileFlippedOver)) {
+    if (!isinArray(t.id, tileFlippedOver) && !playLockout) {
         console.log('not in array')
         if (cardFlipped >= 0) {
-            cardFlip(t, tileIndex)
+            cardFlip(t, tileIndex);
             var secondCard = tileIndex;
-            if (tileFlippedOver[tileFlippedOver.length - 1] == tileFlippedOver.length - 2) {
+            playLockout = true;
+            if (checkSrc(tileFlippedOver[tileFlippedOver.length - 1]) == checkSrc(tileFlippedOver[tileFlippedOver.length - 2])) {
                 // Match
                 console.log('Match');
+                playLockout = false;
+                cardFlipped = -1;
             } else {
                 // No Match
                 console.log('No Match');
-                timer = setInterval(hideCard, 3000);
+                timer = setInterval(hideCard, 1000);
             }
         } else {
             cardFlipped = tileIndex;
