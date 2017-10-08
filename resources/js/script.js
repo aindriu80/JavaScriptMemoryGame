@@ -4,9 +4,11 @@ var tileFlippedOver = [];
 var cardFlipped = -1;
 var timer = '';
 var playLockout = false;
+var gamePlay = false; // controls if we rebuild the board restart
+
 var startButton = document.getElementById('start')
 var gameBoard = document.getElementById('gameboard');
-var gamePlay = false; // controls if we rebuild the board restart
+var message = document.getElementById('message');
 
 //event listeners
 startButton.addEventListener('click', startGame);
@@ -21,6 +23,8 @@ function startGame() {
         tileArray = tileImages.concat(tileImages);
         shuffleArray(tileArray);
         buildBoard();
+        message.innerHTML = "Click any tile";
+
     }
 
 }
@@ -41,18 +45,17 @@ function isinArray(v, array) {
 function cardFlip(t, ti) {
     t.src = "resources/img/" + tileArray[ti];
     tileFlippedOver.push(t.id);
-    console.log(tileFlippedOver);
 }
 
 function hideCard() {
     for (var x = 0; x < 2; x++) {
         var vid = tileFlippedOver.pop();
         document.getElementById(vid).src = "resources/img/back.jpg";
-        console.log(vid);
     }
     clearInterval(timer);
     playLockout = false;
     cardFlipped = -1;
+    message.innerHTML = "Click any tile";
 }
 
 function checkSrc(v) {
@@ -63,19 +66,19 @@ function checkSrc(v) {
 function pickCard(tileIndex, t) {
     // check if its already flipped
     if (!isinArray(t.id, tileFlippedOver) && !playLockout) {
-        console.log('not in array')
+        message.innerHTML = "Check for Match";
         if (cardFlipped >= 0) {
             cardFlip(t, tileIndex);
             var secondCard = tileIndex;
             playLockout = true;
             if (checkSrc(tileFlippedOver[tileFlippedOver.length - 1]) == checkSrc(tileFlippedOver[tileFlippedOver.length - 2])) {
                 // Match
-                console.log('Match');
+                message.innerHTML = "Match Found!";
                 playLockout = false;
                 cardFlipped = -1;
             } else {
                 // No Match
-                console.log('No Match');
+                message.innerHTML = "No Match";
                 timer = setInterval(hideCard, 1000);
             }
         } else {
@@ -83,7 +86,7 @@ function pickCard(tileIndex, t) {
             cardFlip(t, tileIndex);
         }
     } else {
-        console.log('in array');
+        message.innerHTML = "Already clicked";
     }
 }
 
