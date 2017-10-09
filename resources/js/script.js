@@ -13,9 +13,21 @@ var message = document.getElementById('message');
 //event listeners
 startButton.addEventListener('click', startGame);
 
+//game over
+function gameover() {
+    startButton.style.display = 'block';
+    message.innerHTML = "click to start new game";
+    gamePlay = false;
+    tileImages = [];
+    tileFlippedOver = [];
+
+}
+
 
 //Functions
 function startGame() {
+    cardFlipped = -1;
+    playLockout = false;
     startButton.style.display = 'none';
     if (!gamePlay) {
         gamePlay = true;
@@ -76,6 +88,10 @@ function pickCard(tileIndex, t) {
                 message.innerHTML = "Match Found!";
                 playLockout = false;
                 cardFlipped = -1;
+                // Check if game is over
+                if (tileFlippedOver.length == tileArray.length) {
+                    gameover();
+                }
             } else {
                 // No Match
                 message.innerHTML = "No Match";
