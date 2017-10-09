@@ -13,16 +13,6 @@ var message = document.getElementById('message');
 //event listeners
 startButton.addEventListener('click', startGame);
 
-//game over
-function gameover() {
-    startButton.style.display = 'block';
-    message.innerHTML = "click to start new game";
-    gamePlay = false;
-    tileImages = [];
-    tileFlippedOver = [];
-
-}
-
 
 //Functions
 function startGame() {
@@ -41,6 +31,12 @@ function startGame() {
 
 }
 
+function buildArray() {
+    for (var x = 1; x < 7; x++) {
+        tileImages.push(x + '.jpg');
+    }
+}
+
 function buildBoard() {
     var html = "";
     for (var x = 0; x <= (tileArray.length - 1); x++) {
@@ -50,13 +46,30 @@ function buildBoard() {
     gameBoard.innerHTML = html;
 }
 
-function isinArray(v, array) {
-    return array.indexOf(v) > -1;
-}
-
-function cardFlip(t, ti) {
-    t.src = "resources/img/" + tileArray[ti];
-    tileFlippedOver.push(t.id);
+function pickCard(tileIndex, t) {
+    if (!isinArray(t.id, tileFlippedOver) && !playLockout) {
+        message.innerHTML = "Check for Match";
+        if (cardFlipped >= 0) {
+            cardFlip(t, tileIndex);
+            playLockout = true;
+            if (checkSrc(tileFlippedOver[tileFlippedOver.length - 1]) == checkSrc(tileFlippedOver[tileFlippedOver.length - 2])) {
+                message.innerHTML = "Match Found!";
+                playLockout = false;
+                cardFlipped = -1;
+                if (tileFlippedOver.length == tileArray.length) {
+                    gameover();
+                }
+            } else {
+                message.innerHTML = "No Match";
+                timer = setInterval(hideCard, 1000);
+            }
+        } else {
+            cardFlipped = tileIndex;
+            cardFlip(t, tileIndex);
+        }
+    } else {
+        message.innerHTML = "Already clicked";
+    }
 }
 
 function hideCard() {
@@ -70,46 +83,28 @@ function hideCard() {
     message.innerHTML = "Click any tile";
 }
 
+//game over
+function gameover() {
+    startButton.style.display = 'block';
+    message.innerHTML = "click to start new game";
+    gamePlay = false;
+    tileImages = [];
+    tileFlippedOver = [];
+
+}
+
+function isinArray(v, array) {
+    return array.indexOf(v) > -1;
+}
+
+function cardFlip(t, ti) {
+    t.src = "resources/img/" + tileArray[ti];
+    tileFlippedOver.push(t.id);
+}
+
 function checkSrc(v) {
     var v = document.getElementById(v).src;
     return v;
-}
-
-function pickCard(tileIndex, t) {
-    // check if its already flipped
-    if (!isinArray(t.id, tileFlippedOver) && !playLockout) {
-        message.innerHTML = "Check for Match";
-        if (cardFlipped >= 0) {
-            cardFlip(t, tileIndex);
-            var secondCard = tileIndex;
-            playLockout = true;
-            if (checkSrc(tileFlippedOver[tileFlippedOver.length - 1]) == checkSrc(tileFlippedOver[tileFlippedOver.length - 2])) {
-                // Match
-                message.innerHTML = "Match Found!";
-                playLockout = false;
-                cardFlipped = -1;
-                // Check if game is over
-                if (tileFlippedOver.length == tileArray.length) {
-                    gameover();
-                }
-            } else {
-                // No Match
-                message.innerHTML = "No Match";
-                timer = setInterval(hideCard, 1000);
-            }
-        } else {
-            cardFlipped = tileIndex;
-            cardFlip(t, tileIndex);
-        }
-    } else {
-        message.innerHTML = "Already clicked";
-    }
-}
-
-function buildArray() {
-    for (var x = 1; x < 7; x++) {
-        tileImages.push(x + '.jpg');
-    }
 }
 
 function shuffleArray(array) {
